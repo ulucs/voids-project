@@ -1,26 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { CreateForecastDto } from './dto/create-forecast.dto';
 import { UpdateForecastDto } from './dto/update-forecast.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Forecast } from './entities/forecast.entity';
 
 @Injectable()
 export class ForecastsService {
-  create(createForecastDto: CreateForecastDto) {
-    return 'This action adds a new forecast';
+  constructor(
+    @InjectRepository(Forecast)
+    private readonly forecastRepository: Repository<Forecast>,
+  ) {}
+
+  async create(createForecastDto: CreateForecastDto) {
+    const forecast = this.forecastRepository.create(createForecastDto);
+    return await this.forecastRepository.save(forecast);
   }
 
-  findAll() {
-    return `This action returns all forecasts`;
+  async findAll() {
+    return await this.forecastRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} forecast`;
+  async findOne(location: string, date: Date) {
+    return await this.forecastRepository.findOneBy({ date, location });
   }
 
-  update(id: number, updateForecastDto: UpdateForecastDto) {
-    return `This action updates a #${id} forecast`;
+  async update(
+    location: string,
+    date: Date,
+    updateForecastDto: UpdateForecastDto,
+  ) {
+    const existingForecast = await this.forecastRepository.findOneBy({
+      date,
+      location,
+    });
+    if (!existingForecast) {
+      throw new Error(
+        `Forecast with Date ${date} and Location ${location} not found`,
+      );
+    }
+    const updatedForecast = Object.assign(existingForecast, updateForecastDto);
+    return await this.forecastRepository.save(updatedForecast);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} forecast`;
+  async remove(location: string, date: Date) {
+    const existingForecast = await this.forecastRepository.findOneBy({
+      date,
+      location,
+    });
+    if (!existingForecast) {
+      throw new Error(
+        `Forecast with Date ${date} and Location ${location} not found`,
+      );
+    }
+    return await this.forecastRepository.remove(existingForecast);
   }
 }

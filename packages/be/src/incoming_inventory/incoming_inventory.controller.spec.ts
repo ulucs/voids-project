@@ -11,7 +11,9 @@ describe('IncomingInventoryController', () => {
       providers: [IncomingInventoryService],
     }).compile();
 
-    controller = module.get<IncomingInventoryController>(IncomingInventoryController);
+    controller = module.get<IncomingInventoryController>(
+      IncomingInventoryController,
+    );
   });
 
   it('should be defined', () => {

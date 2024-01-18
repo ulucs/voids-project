@@ -1,34 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ForecastsService } from './forecasts.service';
 import { CreateForecastDto } from './dto/create-forecast.dto';
 import { UpdateForecastDto } from './dto/update-forecast.dto';
+import { DateParam } from 'src/pipes/dateParam';
 
 @Controller('forecasts')
 export class ForecastsController {
-  constructor(private readonly forecastsService: ForecastsService) {}
+  constructor(private readonly forecastService: ForecastsService) {}
 
   @Post()
   create(@Body() createForecastDto: CreateForecastDto) {
-    return this.forecastsService.create(createForecastDto);
+    return this.forecastService.create(createForecastDto);
   }
 
   @Get()
   findAll() {
-    return this.forecastsService.findAll();
+    return this.forecastService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.forecastsService.findOne(+id);
+  @Get(':location/:date')
+  findOne(
+    @Param('location') location: string,
+    @Param('date', DateParam) date: Date,
+  ) {
+    return this.forecastService.findOne(location, date);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateForecastDto: UpdateForecastDto) {
-    return this.forecastsService.update(+id, updateForecastDto);
+  @Patch(':location/:date')
+  update(
+    @Param('location') location: string,
+    @Param('date', DateParam) date: Date,
+    @Body() updateForecastDto: UpdateForecastDto,
+  ) {
+    return this.forecastService.update(location, date, updateForecastDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.forecastsService.remove(+id);
+  @Delete(':location/:date')
+  remove(
+    @Param('location') location: string,
+    @Param('date', DateParam) date: Date,
+  ) {
+    return this.forecastService.remove(location, date);
   }
 }
