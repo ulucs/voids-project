@@ -5,7 +5,7 @@ import { ForecastsModule } from './forecasts/forecasts.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IncomingInventoryModule } from './incoming_inventory/incoming_inventory.module';
-import { WeatherModule } from 'weather/weather.module';
+import { WeatherModule } from 'src/weather/weather.module';
 import { LocationsModule } from './locations/locations.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 

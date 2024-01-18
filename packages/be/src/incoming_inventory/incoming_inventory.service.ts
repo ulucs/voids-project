@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { And, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { CreateIncomingInventoryDto } from './dto/create-incoming_inventory.dto';
 import { UpdateIncomingInventoryDto } from './dto/update-incoming_inventory.dto';
 import { IncomingInventory } from './entities/incoming_inventory.entity';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class IncomingInventoryService {
@@ -20,12 +21,25 @@ export class IncomingInventoryService {
   }
 
   async findAll() {
-    return await this.incomingInventoryRepository.find();
+    return await this.incomingInventoryRepository.find({
+      where: {
+        date: And(
+          LessThanOrEqual(addDays(new Date(), 14)),
+          MoreThanOrEqual(new Date()),
+        ),
+      },
+    });
   }
 
   async findInLocation(location: string) {
     return await this.incomingInventoryRepository.find({
-      where: { location },
+      where: {
+        location,
+        date: And(
+          LessThanOrEqual(addDays(new Date(), 14)),
+          MoreThanOrEqual(new Date()),
+        ),
+      },
     });
   }
 

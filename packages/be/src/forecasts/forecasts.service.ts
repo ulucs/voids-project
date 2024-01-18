@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateForecastDto } from './dto/create-forecast.dto';
 import { UpdateForecastDto } from './dto/update-forecast.dto';
-import { Repository } from 'typeorm';
+import { And, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Forecast } from './entities/forecast.entity';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class ForecastsService {
@@ -18,12 +19,25 @@ export class ForecastsService {
   }
 
   async findAll() {
-    return await this.forecastRepository.find();
+    return await this.forecastRepository.find({
+      where: {
+        date: And(
+          LessThanOrEqual(addDays(new Date(), 14)),
+          MoreThanOrEqual(new Date()),
+        ),
+      },
+    });
   }
 
   async findInLocation(location: string) {
     return await this.forecastRepository.find({
-      where: { location },
+      where: {
+        location,
+        date: And(
+          LessThanOrEqual(addDays(new Date(), 14)),
+          MoreThanOrEqual(new Date()),
+        ),
+      },
     });
   }
 

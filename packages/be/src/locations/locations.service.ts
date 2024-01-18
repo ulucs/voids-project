@@ -9,7 +9,7 @@ export class LocationsService {
 
   constructor(@InjectDataSource() private readonly db: DataSource) {}
 
-  async findAll() {
+  async findAll(): Promise<{ name: string }[]> {
     return await this.db.query(
       `select distinct location as name from ${this.schema}incoming_inventory`,
     );

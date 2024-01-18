@@ -10,8 +10,7 @@ export class WeatherController {
   getForecast(
     @Param('location') location: string,
     @Query('from', DateParam) from: Date = new Date(),
-    @Query('to', DateParam) to: Date = new Date(),
   ) {
-    return this.weatherService.getWeather(location, from, to);
+    return this.weatherService.getWeather(location, from);
   }
 }
