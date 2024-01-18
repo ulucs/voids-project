@@ -28,6 +28,11 @@ export class IncomingInventoryController {
     return this.incomingInventoryService.findAll();
   }
 
+  @Get(':location')
+  findInLocation(@Param('location') location: string) {
+    return this.incomingInventoryService.findInLocation(location);
+  }
+
   @Get(':location/:date')
   findOne(
     @Param('location') location: string,

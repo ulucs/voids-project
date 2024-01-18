@@ -1,8 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('incoming_inventory', {
-  schema: 'oneglass',
-})
+@Entity('incoming_inventory')
 export class IncomingInventory {
   @PrimaryColumn({ type: 'timestamp without time zone' })
   date: Date;

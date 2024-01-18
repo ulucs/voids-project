@@ -23,6 +23,12 @@ export class IncomingInventoryService {
     return await this.incomingInventoryRepository.find();
   }
 
+  async findInLocation(location: string) {
+    return await this.incomingInventoryRepository.find({
+      where: { location },
+    });
+  }
+
   async findOne(location: string, date: Date) {
     return await this.incomingInventoryRepository.findOneBy({ date, location });
   }

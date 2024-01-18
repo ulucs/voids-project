@@ -21,6 +21,12 @@ export class ForecastsService {
     return await this.forecastRepository.find();
   }
 
+  async findInLocation(location: string) {
+    return await this.forecastRepository.find({
+      where: { location },
+    });
+  }
+
   async findOne(location: string, date: Date) {
     return await this.forecastRepository.findOneBy({ date, location });
   }

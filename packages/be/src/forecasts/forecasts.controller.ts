@@ -26,6 +26,11 @@ export class ForecastsController {
     return this.forecastService.findAll();
   }
 
+  @Get(':location')
+  findInLocation(@Param('location') location: string) {
+    return this.forecastService.findInLocation(location);
+  }
+
   @Get(':location/:date')
   findOne(
     @Param('location') location: string,
